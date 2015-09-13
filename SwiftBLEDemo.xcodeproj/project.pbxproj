@@ -16,6 +16,7 @@
 		746D93691BA3664C005D6040 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746D93681BA3664C005D6040 /* CoreBluetooth.framework */; };
 		746D936B1BA36667005D6040 /* PeripheralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D936A1BA36667005D6040 /* PeripheralViewController.swift */; };
 		746D936D1BA36FF5005D6040 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D936C1BA36FF5005D6040 /* Constants.swift */; };
+		746D936F1BA42CE8005D6040 /* CentralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746D936E1BA42CE8005D6040 /* CentralViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		746D93681BA3664C005D6040 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		746D936A1BA36667005D6040 /* PeripheralViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralViewController.swift; sourceTree = "<group>"; };
 		746D936C1BA36FF5005D6040 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		746D936E1BA42CE8005D6040 /* CentralViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CentralViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,8 +93,9 @@
 				746D934F1BA36349005D6040 /* Images.xcassets */,
 				746D93511BA36349005D6040 /* LaunchScreen.xib */,
 				746D93461BA36348005D6040 /* Supporting Files */,
-				746D936A1BA36667005D6040 /* PeripheralViewController.swift */,
 				746D936C1BA36FF5005D6040 /* Constants.swift */,
+				746D936A1BA36667005D6040 /* PeripheralViewController.swift */,
+				746D936E1BA42CE8005D6040 /* CentralViewController.swift */,
 			);
 			path = SwiftBLEDemo;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				746D934B1BA36349005D6040 /* ViewController.swift in Sources */,
+				746D936F1BA42CE8005D6040 /* CentralViewController.swift in Sources */,
 				746D936B1BA36667005D6040 /* PeripheralViewController.swift in Sources */,
 				746D93491BA36349005D6040 /* AppDelegate.swift in Sources */,
 				746D936D1BA36FF5005D6040 /* Constants.swift in Sources */,
