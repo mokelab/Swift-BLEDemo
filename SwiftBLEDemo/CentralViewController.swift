@@ -28,8 +28,8 @@ class CentralViewController : UIViewController, CBCentralManagerDelegate, CBPeri
         self.characteristicUUID = CBUUID(string: Constants.CHARACTERISTIC_UUID)
         
         self.manager = CBCentralManager(delegate : self, queue : nil)
-        self.startButton?.enabled = false
-        self.stopButton?.enabled = false
+        self.startButton?.isEnabled = false
+        self.stopButton?.isEnabled = false
         self.logText?.sizeToFit()
     }
     
@@ -39,77 +39,76 @@ class CentralViewController : UIViewController, CBCentralManagerDelegate, CBPeri
     }
 
     @IBAction func startClicked(sender: AnyObject) {
-        self.startButton?.enabled = false
-        self.stopButton?.enabled = true
-        self.manager.scanForPeripheralsWithServices([self.serviceUUID], options: nil)
-        self.addMessage("Start scan")
+        self.startButton?.isEnabled = false
+        self.stopButton?.isEnabled = true
+        self.manager.scanForPeripherals(withServices: [self.serviceUUID], options: nil)
+        self.addMessage(msg: "Start scan")
     }
     
     @IBAction func stopClicked(sender: AnyObject) {
         self.manager.stopScan()
-        self.addMessage("Stop scan")
+        self.addMessage(msg: "Stop scan")
     }
     
     // MARK: CBCentralManagerDelegate
-    func centralManagerDidUpdateState(central: CBCentralManager!) {
-        if central.state == CBCentralManagerState.PoweredOn {
-            self.addMessage("BLE Power On")
-            self.startButton?.enabled = true
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        if central.state == .poweredOn {
+            self.addMessage(msg: "BLE Power On")
+            self.startButton?.isEnabled = true
         }
     }
     
-    func centralManager(central: CBCentralManager!, didDiscoverPeripheral peripheral: CBPeripheral!,
-        advertisementData: [NSObject : AnyObject]!, RSSI: NSNumber!) {
-            self.addMessage("Peripheral discovered")
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        self.addMessage(msg: "Peripheral discovered")
             
-            self.peripheral = peripheral
-            self.peripheral.delegate = self
-            self.manager.connectPeripheral(peripheral, options: nil)
-            self.manager.stopScan()
+        self.peripheral = peripheral
+        self.peripheral.delegate = self
+        self.manager.connect(peripheral, options: nil)
+        self.manager.stopScan()
     }
     
-    func centralManager(central: CBCentralManager!, didConnectPeripheral peripheral: CBPeripheral!) {
-        self.addMessage("Connected to peripheral")
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        self.addMessage(msg: "Connected to peripheral")
         self.peripheral.discoverServices([self.serviceUUID])
     }
     
     // MARK: CBPeripheralDelegate
-    func peripheral(peripheral: CBPeripheral!, didDiscoverServices error: NSError!) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if (error != nil) {
-            self.addMessage("Failed to discover services " + error!.localizedDescription)
+            self.addMessage(msg: "Failed to discover services " + error!.localizedDescription)
             return
         }
-        let services : NSArray = peripheral.services
-        self.addMessage("Service discovered count=\(services.count) services=\(services)")
-        for service in services as! [CBService] {
-            if service.UUID.isEqual(self.serviceUUID) {
-                self.peripheral.discoverCharacteristics(nil, forService:service)
+        let services : [CBService]? = peripheral.services
+        self.addMessage(msg: "Service discovered count=\(services!.count) services=\(services!)")
+        for service in services! {
+            if service.uuid.isEqual(self.serviceUUID) {
+                self.peripheral.discoverCharacteristics(nil, for:service)
             }
         }
     }
     
-    func peripheral(peripheral: CBPeripheral!, didDiscoverCharacteristicsForService service: CBService!, error: NSError!) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if error != nil {
-            self.addMessage("Failed to discover characteristics " + error!.localizedDescription)
+            self.addMessage(msg: "Failed to discover characteristics " + error!.localizedDescription)
             return
         }
-        let characteristics : NSArray = service.characteristics
-        self.addMessage("Characteristics discovered count=\(characteristics.count) characteristics=\(characteristics)")
-        for c in characteristics as! [CBCharacteristic] {
-            self.addMessage("UUID=" + c.UUID!.UUIDString!)
-            if c.UUID.isEqual(self.characteristicUUID) {
-                self.peripheral.readValueForCharacteristic(c)
+        let characteristics : [CBCharacteristic]? = service.characteristics
+        self.addMessage(msg: "Characteristics discovered count=\(characteristics!.count) characteristics=\(characteristics!)")
+        for c in characteristics! {
+            self.addMessage(msg: "UUID=" + c.uuid.uuidString)
+            if c.uuid.isEqual(self.characteristicUUID) {
+                self.peripheral.readValue(for: c)
             }
         }
     }
     
-    func peripheral(peripheral: CBPeripheral!, didUpdateValueForCharacteristic characteristic: CBCharacteristic!, error: NSError!) {
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         if error != nil {
-            self.addMessage("Failed to read value " + error!.localizedDescription)
+            self.addMessage(msg: "Failed to read value " + error!.localizedDescription)
             return
         }
-        var data = NSString(data: characteristic.value, encoding: NSUTF8StringEncoding)
-        self.addMessage("value=\(data!)")
+        let data = NSString(data: characteristic.value!, encoding: String.Encoding.utf8.rawValue)
+        self.addMessage(msg: "value=\(data!)")
         
     }
     
